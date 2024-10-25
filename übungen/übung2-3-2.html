@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ü2-3-2</title>
+    <style>
+        #content {
+            display: block;
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        #content > img {
+            visibility: hidden;
+        }
+        
+        #toggle:checked ~ #content > img {
+            visibility: visible;
+        }
+        
+        input[type="checkbox"] {
+            /* weil die textbox im video so schön hässlich groß und misaligned ist */
+            zoom: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Übung 2.2</h1>
+    <input type="checkbox" id="toggle" checked>
+    <label for="toggle">hide and show via checkbox</label>
+    <div id="content">
+        <img width="100%" src="https://kaul.inf.h-brs.de/ccm/we/ws24/resources/assets/h-brs.jpg">
+    </div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ü2-4</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        .content>p {
+            text-align: center;
+            margin-top: 13px;
+            margin-bottom: 25px;
+        }
+
+        .title {
+            text-align: center;
+            font: 500 2em 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #a9d7d1;
+            margin: 0px;
+        }
+
+        .content {
+            font: 500 1em 'Roboto', sans-serif;
+            background-color: snow;
+            border-radius: 15px 15px 0px 0px;
+            padding: 20px 50px 10px 50px;
+            margin: 0px 24px 13px 24px;
+        }
+
+
+        .form {
+            display: grid;
+            /* Named columns are not required */
+            grid-template-columns: [labels] 2fr [inputs] 1fr;
+            gap: 18px 14px;
+
+            width: fit-content;
+            /* When the window is wide, make the content be more towards the middle */
+            margin: auto;
+            /* Center horizontally */
+        }
+
+        .form>label {
+            text-align: right;
+        }
+
+        select {
+            height: 33px;
+        }
+        select#mostliked {
+            /* the bottom dropdown is 1px taller! seriously??? */
+            height: 34px;
+        }
+
+        .vertical-children {
+            margin-top: 5px;
+            margin-bottom: 7px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .vertical-children>* {
+            display: block;
+            /* margin-top: 5px; */
+            /* margin-bottom: 12px; */
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title">Survey Form</h1>
+    <div class="content">
+        <p>Let us know how we can improve freeCodeCamp</p>
+        <div class="form">
+            <!-- Use Label type to make sure the text is y-aligned with the input -->
+            <label for="name">* Name:</label>
+            <div> <!-- Make the input not have to take the full width and height of the grid square -->
+                <input type="text" id="name" placeholder="Enter your name">
+            </div>
+
+            <label for="email">* Email:</label>
+            <div>
+                <input type="email" id="email" placeholder="Enter your Email">
+            </div>
+
+            <label for="age">* Age:</label>
+            <div>
+                <input type="number" id="age" placeholder="Age">
+            </div>
+
+            <label for="role">Which option best describes your current role?</label>
+            <div>
+                <select id="role">
+                    <option selected>Student</option>
+                    <option>Goblin</option>
+                </select>
+            </div>
+
+            <label for="mostliked1">How likely is that you would recommend freeCodeCamp to a friend?</label>
+            <div class="vertical-children">
+                <div>
+                    <input type="radio" id="mostliked1" name="mostliked">
+                    <label for="mostliked1">Definitely</label>
+                </div>
+                <div>
+                    <input type="radio" id="mostliked2" name="mostliked">
+                    <label for="mostliked2">Maybe</label>
+
+                </div>
+                <div>
+                    <input type="radio" id="mostliked3" name="mostliked" checked>
+                    <label for="mostliked3">Not sure</label>
+                </div>
+            </div>
+
+            <label for="mostliked">What do you like most in FCC?</label>
+            <div>
+                <select id="mostliked">
+                    <option selected disabled hidden>Select an option</option>
+                    <option>The free</option>
+                    <option>The Code</option>
+                    <option>The Camp</option>
+                </select>
+            </div>
+
+            <label>Things that should be improved in the future (Check all that apply):</label>
+            <div class="vertical-children">
+                <div>
+                    <input type="checkbox" id="improve1" checked>
+                    <label for="improve1">Front-end Projects</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="improve2" checked>
+                    <label for="improve2">Back-end Projects</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="improve3">
+                    <label for="improve3">Data Visualization</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
