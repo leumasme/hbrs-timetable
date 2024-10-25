@@ -1,0 +1,15 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: mediumaquamarine;
+    margin: 0px;
+}
+
+.flextest {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
