@@ -6,13 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="./index.js" type="module"></script>
 </head>
 
 <body>
-    <div class="flextest">
+    <div id="loadingoverlay" class="center-elems">
         <div>
-            <h1>I can center a div!</h1>
+            <h1>Stundenplandaten werden Geladen...</h1>
+            <h2 id="errortext"></h2>
         </div>
+    </div>
+    <div id="content" class="center-elems hidden">
+        <div id="gesamtvorlesungen"></div>
+        <div>Die Termine der Webengineering-Veranstaltungen sind:</div>
+        <div id="termine"></div>
     </div>
 </body>
 
