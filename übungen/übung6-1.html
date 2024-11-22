@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ü6-1</title>
+</head>
+<body>
+    <textarea></textarea>
+    <script>
+        // string, { openingBracket: closingBracket }
+        function check(input, brackets) {
+            let stack = [];
+            let valid = true;
+            for (let char of input) {
+                // Allow any other characters
+                if (!(char in brackets) && !Object.values(brackets).includes(char)) continue;
+                // Is Opening Bracket?
+                if (brackets[char] != undefined) {
+                    stack.push(char);
+                    continue;
+                }
+                let top = stack[stack.length - 1]; // Array.at is not widely supported yet :(
+                // Is correct closing bracket?
+                if (brackets[top] == char) {
+                    stack.pop();
+                    continue;
+                }
+                // Encountered the wrong closing bracket!
+                valid = false;
+                break;
+            }
+            // All brackets need to be closed as well
+            valid = valid && stack.length == 0;
+            return valid;
+        }
+
+        const bracketPairs = {
+            "{": "}",
+            "[": "]",
+            "(": ")"
+        }
+
+        const textarea = document.querySelector("textarea");
+        textarea.addEventListener("input", (evt) => {
+            let valid = check(textarea.value, bracketPairs)
+            textarea.style.backgroundColor = valid ? "inherit" : "red"
+        })
+    </script>
+</body>
+</html>
