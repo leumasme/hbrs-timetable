@@ -1,23 +1,7 @@
+import { calculateMaxDayOverlap, getTimetableData } from "./timetable.js"
+
 try {
-    /** @type {Array<{
-      cleanTitle: string,
-      date: string,
-      endTime: string,
-      group: string | null,
-      lecturer: string,
-      parsedDate: {
-        start: string,
-        end: string,
-        info: string
-      },
-      room: string,
-      semesterName: string,
-      startTime: string,
-      title: string,
-      type: Array<string> | null,
-      weekday: string
-    }>} */
-    var timetableData = await fetch("https://eva2.olotl.net/").then(r => r.json());
+    var timetableData = await getTimetableData();
 } catch {
     document.getElementById("errortext").innerText = "Laden Fehlgeschlagen!"
     throw new Error("Fail");
@@ -26,18 +10,32 @@ try {
 document.getElementById("loadingoverlay").style.display = "none"
 document.getElementById("content").classList.remove("hidden")
 
-let klessEvents = timetableData.filter(x => x.lecturer == "Kless");
+timetableData = timetableData.filter(e => e.semesterName == "BI 5")
 
-console.log(klessEvents);
+const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+const rowCounts = {}
+for (let day of days) {
+    console.log("Am tag", day, "gibt es gleichzeitig bis zu", calculateMaxDayOverlap(timetableData, day), "veranstaltungen")
+    rowCounts[day] = calculateMaxDayOverlap(timetableData, day);
+}
+const totalRows = Object.values(rowCounts).reduce((a, b) => a + b, 0)
+const table = document.getElementById("calendar-table");
+table.style.gridTemplateRows = `repeat(${totalRows + 1}, 1fr)`;
+table.style.gridTemplateColumns = `repeat(${46}, 1fr)`; // TODO: Calculate
 
-document.getElementById("gesamtvorlesungen").innerText = `Herr Kless hält insgesamt ${klessEvents.length} Veranstaltungen`
-let webengEvents = klessEvents.filter(e => e.title.includes("Web Engineering") && e.semesterName.startsWith("BWI"))
+// Insert day labels at the left side
+// Starts at 1, skip 1 for header
+let currRow = 2;
+for (let [day, height] of Object.entries(rowCounts)) {
+    console.log(day, height)
+    if (height == 0) continue;
+    const dayLabel = document.createElement("div");
+    dayLabel.innerText = day;
+    dayLabel.classList.add("day-label")
+    dayLabel.style.gridRow = `${currRow} / span ${height}`
+    currRow += height;
+    table.appendChild(dayLabel)
+}
 
-let weekdays = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"]
-document.getElementById("termine").innerText = webengEvents.map(e => {
-    let types = e.type?.join(" / ") ?? "?";
-    // Mi -> Mittwoch
-    let weekday = weekdays.find(day => day.startsWith(e.weekday));
-    let time = e.startTime + "-" + e.endTime;
-    return `${types}: ${weekday}, ${time}`;
-}).join("\n")
+// TODO: Calculate column counts based on start/end time
+// TODO: Insert events

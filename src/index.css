@@ -25,3 +25,19 @@ body {
 .hidden {
     display: none;
 }
+
+#calendar-table {
+    display: grid;
+    width: 80%;
+    height: 80%;
+    grid-auto-rows: 1fr;
+    grid-auto-columns: 1fr;
+    background-color: lightgray;
+}
+
+.day-label {
+    background-color: aliceblue;
+    border: 1px solid black;
+    text-align: center;
+    align-content: center;
+}
