@@ -11,7 +11,7 @@ body {
 }
 
 .center-elems {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,16 +28,32 @@ body {
 
 #calendar-table {
     display: grid;
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    /* height: 80%; */
+    height: auto;
     grid-auto-rows: 1fr;
     grid-auto-columns: 1fr;
     background-color: lightgray;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.day-label {
+#calendar-table > div {
+    overflow: hidden;
+}
+
+.day-label, .time-label {
     background-color: aliceblue;
     border: 1px solid black;
     text-align: center;
     align-content: center;
+}
+
+.time-label {
+    font-size: 0.85em;
+}
+
+.calendar-event {
+    border: 1px solid black;
+    background-color: aliceblue;
 }
