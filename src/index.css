@@ -41,6 +41,8 @@ body {
     background-color: lightgray;
     margin-top: 20px;
     margin-bottom: 20px;
+    
+    gap: 1px;
 }
 
 #calendar-table > div {
@@ -49,16 +51,27 @@ body {
 
 .day-label, .time-label {
     background-color: aliceblue;
-    border: 1px solid black;
+    outline: 1px solid black;
+    /* Position in front of events to preserve outline */
+    z-index: 1;
     text-align: center;
     align-content: center;
 }
 
+.day-label {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
 .time-label {
     font-size: 0.85em;
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
 
 .calendar-event {
-    border: 1px solid black;
+    outline: 1px solid gray;
     background-color: aliceblue;
+    font-size: 0.9em;
+    padding-left: 2px;
 }
