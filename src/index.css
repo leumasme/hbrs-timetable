@@ -31,8 +31,13 @@ body {
     width: 90%;
     /* height: 80%; */
     height: auto;
-    grid-auto-rows: 1fr;
-    grid-auto-columns: 1fr;
+
+    /* TODO: Does max-content rows look better? */
+    /* --event-rows */
+    grid-template-rows: [time-header] max-content repeat(var(--event-rows), 1fr);
+    /* --event-columns */
+    grid-template-columns: [day-header] max-content repeat(var(--event-columns), 1fr);
+
     background-color: lightgray;
     margin-top: 20px;
     margin-bottom: 20px;
