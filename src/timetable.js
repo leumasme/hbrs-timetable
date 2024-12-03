@@ -135,7 +135,7 @@ function initializeGrid(grid, rowCounts, timeColumns) {
         currRow += height;
         grid.appendChild(dayLabel)
     }
-    
+
     // Insert time labels at the top
     // Starts at 1, skip 1 for other header
     let currColumn = 2;
@@ -150,10 +150,24 @@ function initializeGrid(grid, rowCounts, timeColumns) {
 
 }
 
+function fillEmptySpaces(grid, gridMap) {
+    for (let row = 0; row < gridMap.length; row++) {
+        for (let col = 0; col < gridMap[row].length; col++) {
+            if (!gridMap[row][col]) {
+                const emptySpace = document.createElement("div");
+                emptySpace.classList.add("empty-space")
+                emptySpace.style.gridRow = `${row + 2} / span 1`;
+                emptySpace.style.gridColumn = `${col + 2} / span 1`;
+                grid.appendChild(emptySpace)
+            }
+        }
+    }
+}
+
 const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 
 /**
- * @param {Array<CalendarEvent>} events
+ * @param {Array<CalendarEvent>} timetableData
  */
 export function writeTimetableGrid(timetableData) {
     // --- calculate column count / start+end time
@@ -169,7 +183,7 @@ export function writeTimetableGrid(timetableData) {
     // ---
 
     const rowCounts = calculateAllDayOverlaps(timetableData);
-    
+
     const totalRows = Object.values(rowCounts).reduce((a, b) => a + b, 0)
 
     const grid = document.getElementById("calendar-table");
@@ -206,10 +220,10 @@ export function writeTimetableGrid(timetableData) {
 
     for (let event of timetableData) {
         // Find the row where the events day starts
-        let initialRow = 0;
+        let row = 0;
         for (let day of days) {
             if (day == event.weekday) break;
-            initialRow += rowCounts[day];
+            row += rowCounts[day];
         }
 
         let startCol = calculateTimeGridDistance(minStartTime, event.startTime.split(":").map(Number));
@@ -219,22 +233,41 @@ export function writeTimetableGrid(timetableData) {
         do {
             var occupied = false;
             for (let i = startCol; i < endCol; i++) {
-                if (gridMap[initialRow][i]) occupied = true;
+                if (gridMap[row][i]) occupied = true;
             }
-            if (occupied) initialRow++;
+            if (occupied) row++;
         } while (occupied)
 
         // Mark spots as occupied
         for (let i = startCol; i < endCol; i++) {
-            gridMap[initialRow][i] = true;
+            gridMap[row][i] = true;
         }
 
         // Insert event into DOM
         const eventElement = document.createElement("div");
         eventElement.innerText = event.title;
         eventElement.classList.add("calendar-event")
-        eventElement.style.gridRow = `${initialRow + 2} / span 1`;
+        eventElement.style.gridRow = `${row + 2} / span 1`;
         eventElement.style.gridColumn = `${startCol + 2} / ${endCol + 2}`;
+        eventElement.style.backgroundColor = "#" + intToRGB(hashCode(event.cleanTitle + "aaa")) + "77"
         grid.appendChild(eventElement)
     }
+
+    fillEmptySpaces(grid, gridMap)
+}
+
+function hashCode(str) { // java String#hashCode
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+       hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+} 
+
+function intToRGB(i){
+    var c = (i & 0x00FFFFFF)
+        .toString(16)
+        .toUpperCase();
+
+    return "00000".substring(0, 6 - c.length) + c;
 }

@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: mediumaquamarine;
+    background-color: darkseagreen;
     margin: 0px;
     font-family: 'Roboto', sans-serif;
 }
@@ -32,9 +32,9 @@ body {
     /* height: 80%; */
     height: auto;
 
-    /* TODO: Does max-content rows look better? */
+    /* TODO: Does max-content rows look better than 1fr? */
     /* --event-rows */
-    grid-template-rows: [time-header] max-content repeat(var(--event-rows), 1fr);
+    grid-template-rows: [time-header] max-content repeat(var(--event-rows), max-content);
     /* --event-columns */
     grid-template-columns: [day-header] max-content repeat(var(--event-columns), 1fr);
 
@@ -53,7 +53,7 @@ body {
     background-color: aliceblue;
     outline: 1px solid black;
     /* Position in front of events to preserve outline */
-    z-index: 1;
+    z-index: 10;
     text-align: center;
     align-content: center;
 }
@@ -70,8 +70,14 @@ body {
 }
 
 .calendar-event {
-    outline: 1px solid gray;
+    outline: 1px solid rgb(85, 85, 85);
     background-color: aliceblue;
     font-size: 0.9em;
     padding-left: 2px;
+    /* Position in front of empty-space */
+    z-index: 5
+}
+
+.empty-space {
+    outline: 1px solid darkgray;
 }
