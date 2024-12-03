@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ü8-3</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0px;
+        }
+
+        #content {
+            display: grid;
+            grid-template-areas: "top top top"
+                "left mid right"
+                "bottom bottom bottom";
+            grid-template-rows: min-content 1fr min-content;
+            grid-template-columns: minmax(50px, min-content) 1fr minmax(50px, min-content);
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #top {
+            grid-area: top;
+            text-align: center;
+            background-color: #C24F4F;
+
+            h1 {
+                font-family: Arial, Helvetica, sans-serif;
+                color: white;
+            }
+        }
+
+        #left {
+            grid-area: left;
+        }
+
+        #mid {
+            grid-area: mid;
+            background-color: #95D2F3;
+            padding: 20px;
+            font-size: 1.5em;
+        }
+
+        #right {
+            grid-area: right;
+            font-size: 1.25em;
+            padding: 20px;
+        }
+
+        #left,
+        #right {
+            background-color: #C28283;
+        }
+
+        #bottom {
+            grid-area: bottom;
+            text-align: center;
+            background-color: black;
+            color: white;
+            font-size: 2em;
+        }
+
+        .btnlist {
+            display: flex;
+        }
+
+        .vertical {
+            flex-direction: column;
+        }
+
+        button {
+            border-radius: 20px;
+            padding-left: 30px;
+            padding-right: 30px;
+            font-size: 1.5em;
+            margin: 5px;
+            background-color: #6A70A0;
+            font-weight: bold;
+            /* text-transform: capitalize; */
+        }
+
+        .active {
+            background-color: #E1DCDA;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <div id="top">
+            <h1>WWW-Navigator</h1>
+            <div class="btnlist horizontal"></div>
+        </div>
+        <div id="left">
+            <div class="btnlist vertical"></div>
+        </div>
+        <div id="mid"></div>
+        <div id="right"></div>
+        <div id="bottom">
+            Footer
+        </div>
+    </div>
+    <script>
+        let data;
+
+        async function load() {
+            data = await fetch("./übung8-3-data.json").then(d => d.json());
+            const topics = Object.keys(data);
+            const topics_buttonlist = document.querySelector("#top .btnlist");
+            for (let topic of topics) {
+                const button = document.createElement("button");
+                button.textContent = topic;
+
+                topics_buttonlist.appendChild(button);
+            }
+        }
+
+        function clearActive(elem) {
+            for (let child of elem.children) {
+                child.classList.remove("active");
+            }
+        }
+
+        let btnlist_top = document.querySelector("#top .btnlist");
+        let btnlist_left = document.querySelector("#left .btnlist");
+        let active_top = null;
+        btnlist_top.addEventListener("click", (e) => {
+            if (e.target.tagName !== "BUTTON") return;
+
+            clearActive(btnlist_top);
+            e.target.classList.add("active");
+            active_top = e.target.textContent;
+
+            btnlist_left.innerHTML = ""; // stupid?
+            for (let subtopic of Object.keys(data[e.target.textContent])) {
+                const button = document.createElement("button");
+                button.textContent = subtopic;
+                btnlist_left.appendChild(button);
+            }
+        });
+
+        btnlist_left.addEventListener("click", (e) => {
+            if (e.target.tagName !== "BUTTON") return;
+
+            clearActive(btnlist_left);
+            e.target.classList.add("active");
+            // Set center content
+            document.querySelector("#mid").textContent = data[active_top][e.target.textContent].content;
+
+            // Set references
+            document.querySelector("#right").innerHTML = "";
+            for (let ref of data[active_top][e.target.textContent].references) {
+                const a = document.createElement("a");
+                a.href = ref;
+                // Set last url part as text
+                let title = ref.split("/").pop();
+                a.textContent = title;
+
+                document.querySelector("#right").appendChild(a);
+            }
+        });
+
+        load(); // Could also use an IIFE
+    </script>
+</body>
+
+</html>
