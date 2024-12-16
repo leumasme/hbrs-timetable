@@ -15,6 +15,9 @@ timetableData = timetableData.filter(e => e.semesterName == "BI 5")
 
 writeTimetableGrid(timetableData)
 
+// Make gap exactly 1 screen pixel, as otherwise it would be inconsistent between 1px and 2px when using display zoom >:(
+document.body.style.setProperty("--device-pixel-ratio", window.devicePixelRatio)
+
 // TODO: Check if part of manually finding correct row can be automated via labeled grid areas?
 // TODO: Make it look nice
 // TODO: Add new UI to allow users to pick which events to display
