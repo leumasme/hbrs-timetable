@@ -150,15 +150,20 @@ function initializeGrid(grid, rowCounts, timeColumns) {
 
 }
 
+function putGridElement(grid, row, col, width, height, element) {
+    element.style.gridRow = `${row} / span ${height}`;
+    element.style.gridColumn = `${col} / span ${width}`;
+    grid.appendChild(element);
+}
+
 function fillEmptySpaces(grid, gridMap) {
     for (let row = 0; row < gridMap.length; row++) {
         for (let col = 0; col < gridMap[row].length; col++) {
             if (!gridMap[row][col]) {
                 const emptySpace = document.createElement("div");
                 emptySpace.classList.add("empty-space")
-                emptySpace.style.gridRow = `${row + 2} / span 1`;
-                emptySpace.style.gridColumn = `${col + 2} / span 1`;
-                grid.appendChild(emptySpace)
+
+                putGridElement(grid, row + 2, col + 2, 1, 1, emptySpace)
             }
         }
     }
@@ -247,10 +252,9 @@ export function writeTimetableGrid(timetableData) {
         const eventElement = document.createElement("div");
         eventElement.innerText = event.title;
         eventElement.classList.add("calendar-event")
-        eventElement.style.gridRow = `${row + 2} / span 1`;
-        eventElement.style.gridColumn = `${startCol + 2} / ${endCol + 2}`;
         eventElement.style.backgroundColor = "#" + intToRGB(hashCode(event.cleanTitle + "aaa")) + "77"
-        grid.appendChild(eventElement)
+
+        putGridElement(grid, row + 2, startCol + 2, endCol - startCol, 1, eventElement)
     }
 
     fillEmptySpaces(grid, gridMap)
