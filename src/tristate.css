@@ -17,15 +17,15 @@
     overflow: hidden;
 
     interpolate-size: allow-keywords;
-    animation: slideaway 200ms;
     
     max-height: 0px;
-    display: none;
+    visibility: hidden;
+    
+    transition: visibility 200ms, max-height 200ms, margin-top 200ms;
     
     &.expanded {
-        animation: slidein 200ms;
         max-height: fit-content;
-        display: block;
+        visibility: visible;
         margin-top: 4px;
     }
 }
@@ -33,35 +33,6 @@
 ::slotted(:first-child), ::slotted(:last-child) {
     margin-top: 0px;
     margin-bottom: 0px;
-}
-
-/* ??? I need to have the same animation twice? stupid */
-@keyframes slideaway {
-    from {
-        display: block;
-        max-height: fit-content;
-    }
-    
-    to {
-        display: block;
-        max-height: 0px;
-        /* transform: translateY(40px); */
-        /* opacity: 0; */
-    }
-}
-
-@keyframes slidein {
-    from {
-        display: block;
-        max-height: 0px;
-    }
-    
-    to {
-        display: block;
-        max-height: fit-content;
-        /* transform: translateY(40px); */
-        /* opacity: 0; */
-    }
 }
 
 .toggle-btn {
