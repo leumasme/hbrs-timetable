@@ -6,22 +6,29 @@
 export function waitForPickedClasses(timetableData) {
     const classpicker = document.getElementById("classpicker-options");
 
-    for (const eventIndex in timetableData) {
-        const eventElement = document.createElement("div");
+    const eventByHash = new Map(timetableData.map(e => [e.dataHash, e]))
 
-        const event = timetableData[eventIndex];
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.dataset.eventIndex = eventIndex; // TODO: Actual Identifier
-        checkbox.id = `classpicker-event-${eventIndex}`;
-        eventElement.appendChild(checkbox);
+    const eventsBySemester = Object.groupBy(timetableData, e => e.semesterName);
+    for (const [semesterName, events] of Object.entries(eventsBySemester)) {
 
-        const label = document.createElement("label");
-        label.innerText = event.title;
-        label.htmlFor = `classpicker-event-${eventIndex}`;
-        eventElement.appendChild(label);
+        let semesterElement = document.createElement("tri-state-item");
+        semesterElement.setAttribute("label", semesterName);
 
-        classpicker.appendChild(eventElement);
+        const eventsByRelated = Object.groupBy(events, e => e.cleanTitle)
+        const sortedRelatedEvents = Object.entries(eventsByRelated).sort(([a], [b]) => a.localeCompare(b))
+        for (const [cleanTitle, events] of sortedRelatedEvents) {
+        
+            let relatedElement = document.createElement("tri-state-item");
+            relatedElement.setAttribute("label", cleanTitle);
+
+            for (const event of events) {
+                let eventElement = document.createElement("tri-state-item");
+                eventElement.setAttribute("label", event.title);
+                relatedElement.appendChild(eventElement);
+            }
+            semesterElement.appendChild(relatedElement);
+        }
+        classpicker.appendChild(semesterElement);
     }
 
     const finishbutton = document.getElementById("classpicker-finish");
@@ -31,7 +38,7 @@ export function waitForPickedClasses(timetableData) {
             for (const eventElement of classpicker.children) {
                 const checkbox = eventElement.querySelector("input");
                 if (checkbox.checked) {
-                    pickedClasses.push(timetableData[Number(checkbox.dataset.eventIndex)]);
+                    pickedClasses.push(eventByHash.get(checkbox.dataset.eventId));
                 }
             }
             resolve(pickedClasses);

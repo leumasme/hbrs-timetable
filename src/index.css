@@ -81,3 +81,15 @@ body {
 .empty-space {
     outline: 1px solid darkgray;
 }
+
+#classpicker-finish {
+    position: sticky;
+    font-size: large;
+    bottom: 1em;
+}
+
+#classpicker .wrapper {
+    min-width: 50%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
