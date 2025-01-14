@@ -2,10 +2,10 @@
 :host {
     display: block;
     font-family: Arial, sans-serif;
+    margin: 8px 0px;
 }
 
 .item {
-    margin: 8px 0;
     display: flex;
 }
 
@@ -13,11 +13,55 @@
     margin-left: 24px;
     padding-left: 12px;
     border-left: 1px solid #ccc;
+
+    overflow: hidden;
+
+    interpolate-size: allow-keywords;
+    animation: slideaway 200ms;
+    
+    max-height: 0px;
     display: none;
+    
+    &.expanded {
+        animation: slidein 200ms;
+        max-height: fit-content;
+        display: block;
+        margin-top: 4px;
+    }
 }
 
-.children.expanded {
-    display: block;
+::slotted(:first-child), ::slotted(:last-child) {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/* ??? I need to have the same animation twice? stupid */
+@keyframes slideaway {
+    from {
+        display: block;
+        max-height: fit-content;
+    }
+    
+    to {
+        display: block;
+        max-height: 0px;
+        /* transform: translateY(40px); */
+        /* opacity: 0; */
+    }
+}
+
+@keyframes slidein {
+    from {
+        display: block;
+        max-height: 0px;
+    }
+    
+    to {
+        display: block;
+        max-height: fit-content;
+        /* transform: translateY(40px); */
+        /* opacity: 0; */
+    }
 }
 
 .toggle-btn {
@@ -28,6 +72,13 @@
     text-align: start;
     width: 20px;
     color: #666666;
+}
+
+/* The own item line only if the children display is expanded */
+.item:has(+ .expanded) {
+    .toggle-btn {
+        rotate: 90deg;
+    }
 }
 
 .toggle-btn:hover {
@@ -41,4 +92,8 @@
 
 label {
     user-select: none;
+}
+
+* {
+    transition: all 0.3s;
 }
