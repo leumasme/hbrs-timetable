@@ -24,6 +24,7 @@ export function waitForPickedClasses(timetableData) {
             for (const event of events) {
                 let eventElement = document.createElement("tri-state-item");
                 eventElement.setAttribute("label", event.title);
+                eventElement.eventId = event.dataHash;
                 relatedElement.appendChild(eventElement);
             }
             semesterElement.appendChild(relatedElement);
@@ -35,12 +36,13 @@ export function waitForPickedClasses(timetableData) {
     return new Promise((resolve, reject) => {
         finishbutton.addEventListener("click", () => {
             const pickedClasses = [];
-            for (const eventElement of classpicker.children) {
-                const checkbox = eventElement.querySelector("input");
-                if (checkbox.checked) {
-                    pickedClasses.push(eventByHash.get(checkbox.dataset.eventId));
+            const checkboxes = classpicker.querySelectorAll("tri-state-item");
+            for (const triStateCheckbox of checkboxes) {
+                if (triStateCheckbox.checked && triStateCheckbox.eventId != undefined) {
+                    pickedClasses.push(eventByHash.get(triStateCheckbox.eventId));
                 }
             }
+            console.log("Picked classes:", pickedClasses)
             resolve(pickedClasses);
         })
     })
