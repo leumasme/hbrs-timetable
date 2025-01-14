@@ -14,20 +14,36 @@
   semesterName: string,
   startTime: string,
   endTime: string,
-  startTimeNum: Array<number>,
-  endTimeNum: Array<number>,
   title: string,
   type: Array<string> | null,
   weekday: Weekday
+  startTimeNum: Array<number>,
+  endTimeNum: Array<number>,
+  dataHash: string,
 }} CalendarEvent */
 
 /** @returns {Promise<Array<CalendarEvent>>} */
 export async function getTimetableData() {
     let events = await fetch("https://eva2.olotl.net/").then(r => r.json());
+
+    const textEncoder = new TextEncoder()
+    const promises = [];
     for (let event of events) {
         event.startTimeNum = event.startTime.split(":").map(Number);
         event.endTimeNum = event.endTime.split(":").map(Number);
+
+        // Hash the source event data to identify it later
+        const idString = event.title + event.startTime + event.endTime + event.weekday + event.room + event.lecturer;
+        const promise = window.crypto.subtle.digest("SHA-256", textEncoder.encode(idString)).then(hashBuffer => {
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+            event.dataHash = hashHex;
+        })
+        promises.push(promise);
     }
+    // Wait for all hashes to be calculated, may run in parallel
+    await Promise.all(promises);
+
     return events;
 }
 
@@ -263,12 +279,12 @@ export function writeTimetableGrid(timetableData) {
 function hashCode(str) { // java String#hashCode
     var hash = 0;
     for (var i = 0; i < str.length; i++) {
-       hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     return hash;
-} 
+}
 
-function intToRGB(i){
+function intToRGB(i) {
     var c = (i & 0x00FFFFFF)
         .toString(16)
         .toUpperCase();
