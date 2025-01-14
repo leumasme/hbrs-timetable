@@ -1,5 +1,9 @@
-import tristateStyle from "./tristate.css" with { type: "css" };
-// Firefox does not support this syntax    ^^^^ Do we care?
+// import tristateStyle from "./tristate.css" with { type: "css" };
+// Firefox does not support this syntax       ^^^^ Do we care?
+
+// Alternative solution, but less elegant:
+const tristateStyle = new CSSStyleSheet();
+await tristateStyle.replace(await fetch("tristate.css").then(r => r.text()))
 
 class TriStateItem extends HTMLElement {
     constructor() {
