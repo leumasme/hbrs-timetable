@@ -14,6 +14,7 @@ export function waitForPickedClasses(timetableData) {
         let semesterElement = document.createElement("tri-state-item");
         semesterElement.setAttribute("label", semesterName);
 
+        /** @type {Record<string, import('./timetable').CalendarEvent[]>} */
         const eventsByRelated = Object.groupBy(events, e => e.cleanTitle)
         const sortedRelatedEvents = Object.entries(eventsByRelated).sort(([a], [b]) => a.localeCompare(b))
         for (const [cleanTitle, events] of sortedRelatedEvents) {
@@ -23,7 +24,7 @@ export function waitForPickedClasses(timetableData) {
 
             for (const event of events) {
                 let eventElement = document.createElement("tri-state-item");
-                eventElement.setAttribute("label", event.title);
+                eventElement.setAttribute("label", `${event.title} (${event.lecturer}, ${event.weekday} ${event.startTime})`); ;
                 eventElement.eventId = event.dataHash;
                 relatedElement.appendChild(eventElement);
             }
