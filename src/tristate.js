@@ -30,12 +30,18 @@ class TriStateItem extends HTMLElement {
             this.handleCheckboxClick();
             e.stopPropagation();
         };
-        item.appendChild(checkbox);
         this._checkbox = checkbox;
+        // The checkbox will be put inside the label element, so it will be implicitly associated with the label
+        // Clicking the label will then toggle the checkbox
 
-        // Text label for the item
+        // Label for the item
         const label = document.createElement("label");
+        label.appendChild(checkbox);
+        // The text inside the label
+        const labelText = document.createTextNode("");
+        label.appendChild(labelText);
         item.appendChild(label);
+        this._labelText = labelText;
 
         this.shadowRoot.appendChild(item);
 
@@ -56,7 +62,7 @@ class TriStateItem extends HTMLElement {
     /** Overwrite - called when an attribute of the element changes */
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === "label") {
-            this.shadowRoot.querySelector("label").textContent = newValue;
+            this._labelText.textContent = newValue;
         }
     }
 
