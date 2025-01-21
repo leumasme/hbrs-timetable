@@ -16,18 +16,18 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-.center-contents-vertical, .center-contents-horizontal {
+.center-contents-vertical, .center-contents-horizontal, .center-contents {
     display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.center-contents-horizontal, .center-contents {
     flex-direction: row;
 }
 
+.center-contents-horizontal, .center-contents {
+    justify-content: center;
+}
+
 .center-contents-vertical, .center-contents {
-    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
 #errortext {
