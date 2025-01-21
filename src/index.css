@@ -16,11 +16,17 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-.center-elems {
-    min-height: 100vh;
+.center-contents-vertical, .center-contents-horizontal {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.center-contents-horizontal, .center-contents {
+    flex-direction: row;
+}
+
+.center-contents-vertical, .center-contents {
     flex-direction: column;
 }
 
