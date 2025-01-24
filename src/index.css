@@ -54,7 +54,7 @@ body {
     /* --event-columns */
     grid-template-columns: [day-header] max-content repeat(var(--event-columns), 1fr);
 
-    background-color: lightgray;
+    background-color: rgb(225, 225, 225);
     margin-top: 20px;
     margin-bottom: 20px;
 
@@ -91,7 +91,28 @@ body {
     font-size: 0.9em;
     padding-left: 2px;
     /* Position in front of empty-space */
-    z-index: 5
+    z-index: 5;
+
+    background: rgba(var(--event-color), 0.5);
+
+    &.calendar-event-type-übung:not(.calendar-event-type-vorlesung) {
+        background: repeating-linear-gradient(
+            45deg,
+            rgba(var(--event-color), 0.5),
+            rgba(var(--event-color), 0.5) 10px,
+            rgba(var(--event-color), 0.4) 10px,
+            rgba(var(--event-color), 0.4) 20px
+        )
+    }
+    &.calendar-event-type-seminar, &.calendar-event-type-praktikum {
+        background: repeating-linear-gradient(
+            -45deg,
+            rgba(var(--event-color), 0.45),
+            rgba(var(--event-color), 0.45) 20px,
+            rgba(var(--event-color), 0.55) 20px,
+            rgba(var(--event-color), 0.55) 40px
+        )
+    }
 }
 
 .empty-space {

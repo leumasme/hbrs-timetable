@@ -268,7 +268,13 @@ export function writeTimetableGrid(timetableData) {
         const eventElement = document.createElement("div");
         eventElement.innerText = event.title;
         eventElement.classList.add("calendar-event")
-        eventElement.style.backgroundColor = "#" + intToRGB(hashCode(event.cleanTitle + "aaa")) + "77"
+        for (let type of event.type) {
+            eventElement.classList.add("calendar-event-type-" + type.toLowerCase())
+        }
+        // TODO: Pick better colors for events, so they aren't too similar
+        // eventElement.style.backgroundColor = "#" + intToRGB(hashCode(event.cleanTitle + "aaa")) + "77"
+        const [r, g, b] = intToRGBParts(hashCode(event.cleanTitle + "aaa"))
+        eventElement.style.setProperty("--event-color", `${r}, ${g}, ${b}`)
 
         putGridElement(grid, row + 2, startCol + 2, endCol - startCol, 1, eventElement)
     }
@@ -277,17 +283,24 @@ export function writeTimetableGrid(timetableData) {
 }
 
 function hashCode(str) { // java String#hashCode
-    var hash = 0;
-    for (var i = 0; i < str.length; i++) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     return hash;
 }
 
 function intToRGB(i) {
-    var c = (i & 0x00FFFFFF)
+    let c = (i & 0x00FFFFFF)
         .toString(16)
         .toUpperCase();
 
     return "00000".substring(0, 6 - c.length) + c;
+}
+
+function intToRGBParts(i) {
+    let r = (i & 0xFF0000) >> 16;
+    let g = (i & 0x00FF00) >> 8;
+    let b = i & 0x0000FF;
+    return [r, g, b];
 }
