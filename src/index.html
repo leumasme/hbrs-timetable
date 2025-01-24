@@ -12,16 +12,36 @@
 
 <body>
     <div id="loadingoverlay" class="center-contents">
-        <div>
-            <h1>Stundenplandaten werden Geladen...</h1>
-            <!-- TODO: Animated SVG Loading Spinner -->
-            <h2 id="errortext"></h2>
-        </div>
+        <h1>Stundenplandaten werden Geladen...</h1>
+        <svg class="spinner" xmlns="http://www.w3.org/2000/svg" viewBox="-0.6 -0.6 1.2 1.2">
+            <style>
+                @keyframes spin {
+                    from {
+                        transform: rotate(0deg);
+                    }
+
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                circle {
+                    --dash-ratio: 0.3;
+                    --circumference: calc(2 * 3.14159 * 0.5);
+                    --dash-length: calc(var(--circumference) * var(--dash-ratio));
+                    --gap-length: calc(var(--circumference) * (1 - var(--dash-ratio)));
+                    stroke-dasharray: var(--dash-length) var(--gap-length);
+                    animation: spin 1s linear infinite;
+                }
+            </style>
+            <circle r="0.5" fill="none" stroke="#000" stroke-width="0.15" stroke-linecap="round" />
+        </svg>
+        <h2 id="errortext"></h2>
     </div>
     <div id="classpicker" class="center-contents-horizontal hidden">
         <div class="wrapper">
             <div id="classpicker-options">
-                
+
             </div>
             <button id="classpicker-finish">Generate!</button>
         </div>

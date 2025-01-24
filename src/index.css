@@ -18,20 +18,24 @@ body {
 
 .center-contents-vertical, .center-contents-horizontal, .center-contents {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .center-contents-horizontal, .center-contents {
-    justify-content: center;
+    align-items: center;
 }
 
 .center-contents-vertical, .center-contents {
-    align-items: center;
+    justify-content: center;
     min-height: 100vh;
 }
 
 #errortext {
     color: salmon;
+}
+
+.spinner {
+    width: 4em;
 }
 
 .hidden {
@@ -57,7 +61,7 @@ body {
     gap: calc(1px / var(--device-pixel-ratio));
 }
 
-#calendar-table > div {
+#calendar-table>div {
     overflow: hidden;
 }
 
