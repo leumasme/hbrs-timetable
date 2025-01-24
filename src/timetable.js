@@ -271,7 +271,7 @@ export function writeTimetableGrid(timetableData) {
         for (let type of event.type) {
             eventElement.classList.add("calendar-event-type-" + type.toLowerCase())
         }
-        // TODO: Pick better colors for events, so they aren't too similar
+        // TODO: Pick better colors for events, so they aren't too similar. Maybe use HSV?
         // eventElement.style.backgroundColor = "#" + intToRGB(hashCode(event.cleanTitle + "aaa")) + "77"
         const [r, g, b] = intToRGBParts(hashCode(event.cleanTitle + "aaa"))
         eventElement.style.setProperty("--event-color", `${r}, ${g}, ${b}`)
