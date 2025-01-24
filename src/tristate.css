@@ -7,6 +7,8 @@
 
 .item {
     display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .children {
@@ -35,14 +37,19 @@
     margin-bottom: 0px;
 }
 
+input[type="checkbox"] {
+    margin: 0px 6px;
+    width: 16px;
+    height: 16px;
+}
+
 .toggle-btn {
     background: none;
     border: none;
     cursor: pointer;
-    /* vertical-align: baseline; */
-    text-align: start;
-    width: 20px;
     color: #666666;
+    width: 16px;
+    aspect-ratio: 1/1;
 }
 
 /* The own item line only if the children display is expanded */
@@ -63,6 +70,7 @@
 
 label {
     user-select: none;
+    display: contents;
 }
 
 * {
