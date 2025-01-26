@@ -110,55 +110,55 @@ body {
     padding-left: 2px;
     /* Position in front of empty-space */
     z-index: 5;
-    
+
     background: oklch(var(--event-color) / 0.5);
-    
+
     display: grid;
     grid-template:
-    "a b" auto
-    "c b" 1fr
-    / minmax(0, 1fr) 2ch;
-    
+        "a b"auto "c b"1fr / minmax(0, 1fr) 2ch;
+
     &>.event-title {
         grid-area: a;
         text-overflow: clip;
         text-wrap-mode: nowrap;
         overflow: hidden;
     }
+
     &>.event-type {
         grid-area: b;
         text-align: center;
 
         background-color: lightgreen;
     }
+
     &>.event-detail {
         grid-area: c;
     }
 
     &.calendar-event-type-übung:not(.calendar-event-type-vorlesung) {
-        background: repeating-linear-gradient(
-            45deg,
-            oklch(var(--event-color) / 0.5),
-            oklch(var(--event-color) / 0.5) 10px,
-            oklch(var(--event-color) / 0.4) 10px,
-            oklch(var(--event-color) / 0.4) 20px
-        );
+        background: repeating-linear-gradient(45deg,
+                oklch(var(--event-color) / 0.5),
+                oklch(var(--event-color) / 0.5) 10px,
+                oklch(var(--event-color) / 0.4) 10px,
+                oklch(var(--event-color) / 0.4) 20px);
+
         &>.event-type {
             background-color: lightskyblue;
         }
     }
+
     &.calendar-event-type-seminar, &.calendar-event-type-praktikum {
-        background: repeating-linear-gradient(
-            -45deg,
-            oklch(var(--event-color) / 0.45),
-            oklch(var(--event-color) / 0.45) 20px,
-            oklch(var(--event-color) / 0.55) 20px,
-            oklch(var(--event-color) / 0.55) 40px
-        );
+        background: repeating-linear-gradient(-45deg,
+                oklch(var(--event-color) / 0.45),
+                oklch(var(--event-color) / 0.45) 20px,
+                oklch(var(--event-color) / 0.55) 20px,
+                oklch(var(--event-color) / 0.55) 40px);
+
         &>.event-type {
             background-color: lightsalmon;
         }
     }
+
     &.hovered {
         outline: 2px dashed black;
         z-index: 20;
@@ -173,6 +173,7 @@ body {
 .top-of-day {
     border-top: 1px solid black;
 }
+
 .bottom-of-day {
     border-bottom: 1px solid black;
 }
@@ -194,23 +195,28 @@ body {
         padding: 5px 4px;
         border-radius: 2px;
     }
-    & > tri-state-item {
+
+    &>tri-state-item {
         background-color: var(--layer1-background);
         color: var(--layer1-text);
         margin: 10px 0px;
         padding: 6px 4px;
-        & > tri-state-item {
+
+        &>tri-state-item {
             background-color: var(--layer2-background);
             color: var(--layer2-text);
-            & > tri-state-item {
+
+            &>tri-state-item {
                 border-radius: 0px;
                 margin: 0px;
                 background-color: var(--layer3-background);
                 color: var(--layer3-text);
+
                 &:first-child {
                     border-radius: 2px 2px 0px 0px;
                     padding-top: 8px;
                 }
+
                 &:last-child {
                     border-radius: 0px 0px 2px 2px;
                     padding-bottom: 8px;
