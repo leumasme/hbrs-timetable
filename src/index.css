@@ -83,6 +83,8 @@ body {
     font-size: 0.85em;
     padding-top: 1px;
     padding-bottom: 1px;
+    position: sticky;
+    top: 0;
 }
 
 .calendar-event {
