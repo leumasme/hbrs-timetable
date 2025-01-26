@@ -172,11 +172,20 @@ function putGridElement(grid, row, col, width, height, element) {
     grid.appendChild(element);
 }
 
-function fillEmptySpaces(grid, gridMap) {
+function fillEmptySpaces(grid, gridMap, rowCounts) {
     for (let row = 0; row < gridMap.length; row++) {
         for (let col = 0; col < gridMap[row].length; col++) {
             if (!gridMap[row][col]) {
                 const emptySpace = document.createElement("div");
+                
+                const [ dayStartRow, dayEndRow ] = findStartEndDayRowForRow(row, rowCounts);
+                if (row == dayStartRow) {
+                    emptySpace.classList.add("top-of-day")
+                }
+                if (row == dayEndRow - 1) {
+                    emptySpace.classList.add("bottom-of-day")
+                }
+
                 emptySpace.classList.add("empty-space")
 
                 putGridElement(grid, row + 2, col + 2, 1, 1, emptySpace)
@@ -241,11 +250,8 @@ export function writeTimetableGrid(timetableData) {
 
     for (let event of timetableData) {
         // Find the row where the events day starts
-        let row = 0;
-        for (let day of days) {
-            if (day == event.weekday) break;
-            row += rowCounts[day];
-        }
+        let row = findStartRowForDay(event.weekday, rowCounts);
+        const [ dayStartRow, dayEndRow ] = findStartEndDayRowForRow(row, rowCounts);
 
         let startCol = calculateTimeGridDistance(minStartTime, event.startTime.split(":").map(Number));
         let endCol = calculateTimeGridDistance(minStartTime, event.endTime.split(":").map(Number));
@@ -271,6 +277,14 @@ export function writeTimetableGrid(timetableData) {
         for (let type of event.type) {
             eventElement.classList.add("calendar-event-type-" + type.toLowerCase())
         }
+
+        if (row == dayStartRow) {
+            eventElement.classList.add("top-of-day")
+        }
+        if (row == dayEndRow - 1) {
+            eventElement.classList.add("bottom-of-day")
+        }
+
         // TODO: Pick better colors for events, so they aren't too similar. Maybe use HSV?
         // eventElement.style.backgroundColor = "#" + intToRGB(hashCode(event.cleanTitle + "aaa")) + "77"
         const [r, g, b] = intToRGBParts(hashCode(event.cleanTitle + "aaa"))
@@ -279,7 +293,33 @@ export function writeTimetableGrid(timetableData) {
         putGridElement(grid, row + 2, startCol + 2, endCol - startCol, 1, eventElement)
     }
 
-    fillEmptySpaces(grid, gridMap)
+    fillEmptySpaces(grid, gridMap, rowCounts)
+}
+
+/* Given a weekday and the row counts for each day, find the row where the day starts */
+function findStartRowForDay(day, rowCounts) {
+    let row = 0;
+    for (let d of days) {
+        if (d == day) break;
+        row += rowCounts[d];
+    }
+    return row;
+}
+
+/* Given a row and the row counts for each day, find the row where the day starts and ends */
+function findStartEndDayRowForRow(row, rowCounts) {
+    let dayStartRow = 0;
+    let dayEndRow = 0;
+    let day = 0;
+    while (day < days.length) {
+        dayEndRow += rowCounts[days[day]];
+        if (row >= dayStartRow && row < dayEndRow) {
+            break;
+        }
+        dayStartRow = dayEndRow;
+        day++;
+    }
+    return [dayStartRow, dayEndRow];
 }
 
 function hashCode(str) { // java String#hashCode
