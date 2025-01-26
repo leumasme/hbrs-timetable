@@ -225,3 +225,16 @@ body {
         }
     }
 }
+
+.footer {
+    width: 100%;
+    background-color: var(--layer2-background);
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 7px 2px;
+
+    & a {
+        color: blue;
+    }
+}
