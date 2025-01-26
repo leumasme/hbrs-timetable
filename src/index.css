@@ -11,9 +11,22 @@ html {
 }
 
 body {
-    background-color: darkseagreen;
+    background-color: var(--background);
+    /* background-color: hsl(30, 80%, 87%); */
+
     margin: 0px;
     font-family: 'Roboto', sans-serif;
+
+    --background: hsl(120, 20%, 65%);
+    --layer1-background: hsl(144, 21%, 40%);
+    --layer1-text: white;
+    --layer2-background: hsl(144, 18%, 50%);
+    --layer2-text: white;
+    --layer3-background: hsl(30, 80%, 87%);
+    --layer3-text: black;
+    --table-background: rgb(225, 225, 225);
+    --label-background: aliceblue;
+    --label-text: black;
 }
 
 .center-contents-vertical, .center-contents-horizontal, .center-contents {
@@ -54,7 +67,7 @@ body {
     /* --event-columns */
     grid-template-columns: [day-header] max-content repeat(var(--event-columns), 1fr);
 
-    background-color: rgb(225, 225, 225);
+    background-color: var(--table-background);
     margin-top: 20px;
     margin-bottom: 20px;
 
@@ -66,7 +79,8 @@ body {
 }
 
 .day-label, .time-label {
-    background-color: aliceblue;
+    background-color: var(--label-background);
+    color: var(--label-text);
     outline: 1px solid black;
     /* Position in front of events to preserve outline */
     z-index: 10;
@@ -147,4 +161,36 @@ body {
 #classpicker .wrapper {
     min-width: 50%;
     margin-bottom: 50px;
+}
+
+#classpicker-options {
+    & tri-state-item {
+        margin: 8px 0px;
+        padding: 5px 4px;
+        border-radius: 2px;
+    }
+    & > tri-state-item {
+        background-color: var(--layer1-background);
+        color: var(--layer1-text);
+        margin: 10px 0px;
+        padding: 6px 4px;
+        & > tri-state-item {
+            background-color: var(--layer2-background);
+            color: var(--layer2-text);
+            & > tri-state-item {
+                border-radius: 0px;
+                margin: 0px;
+                background-color: var(--layer3-background);
+                color: var(--layer3-text);
+                &:first-child {
+                    border-radius: 2px 2px 0px 0px;
+                    padding-top: 8px;
+                }
+                &:last-child {
+                    border-radius: 0px 0px 2px 2px;
+                    padding-bottom: 8px;
+                }
+            }
+        }
+    }
 }
