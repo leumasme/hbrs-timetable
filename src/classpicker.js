@@ -33,20 +33,43 @@ export function waitForPickedClasses(timetableData) {
         classpicker.appendChild(semesterElement);
     }
 
+    loadPreviouslySelectedEvents();
+
     const finishbutton = document.getElementById("classpicker-finish");
     return new Promise((resolve, reject) => {
         finishbutton.addEventListener("click", () => {
-            const pickedClasses = [];
+            const pickedEvents = new Set();
             const checkboxes = classpicker.querySelectorAll("tri-state-item");
             for (const triStateCheckbox of checkboxes) {
                 if (triStateCheckbox.checked && triStateCheckbox.eventId != undefined) {
-                    pickedClasses.push(eventByHash.get(triStateCheckbox.eventId));
+                    pickedEvents.add(eventByHash.get(triStateCheckbox.eventId));
                 }
             }
-            console.log("Picked classes:", pickedClasses)
-            resolve(pickedClasses);
+            console.log("Picked events:", pickedEvents)
+            const pickedEventsArr = Array.from(pickedEvents.values());
+            saveSelectedEvents(pickedEventsArr);
+            resolve(pickedEventsArr);
         })
     })
+}
+
+function loadPreviouslySelectedEvents() {
+    const lastSelected = localStorage.getItem("selectedEvents");
+    if (!lastSelected) return;
+    const hashes = new Set(lastSelected.split(","));
+    console.log("Loading", hashes.size, "previously selected events:", hashes)
+    for (const triStateCheckbox of document.querySelectorAll("tri-state-item")) {
+        if (triStateCheckbox.eventId != undefined && hashes.has(triStateCheckbox.eventId)) {
+            triStateCheckbox.checked = true;
+            triStateCheckbox.handleCheckboxClick();
+        }
+    }
+}
+
+function saveSelectedEvents(pickedEvents) {
+    const hashes = pickedEvents.map(e => e.dataHash).join(",");
+    localStorage.setItem("selectedEvents", hashes);
+    console.log("Saved", pickedEvents.length, "selected events:", hashes)
 }
 
 export { }
