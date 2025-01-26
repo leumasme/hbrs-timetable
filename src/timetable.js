@@ -177,8 +177,8 @@ function fillEmptySpaces(grid, gridMap, rowCounts) {
         for (let col = 0; col < gridMap[row].length; col++) {
             if (!gridMap[row][col]) {
                 const emptySpace = document.createElement("div");
-                
-                const [ dayStartRow, dayEndRow ] = findStartEndDayRowForRow(row, rowCounts);
+
+                const [dayStartRow, dayEndRow] = findStartEndDayRowForRow(row, rowCounts);
                 if (row == dayStartRow) {
                     emptySpace.classList.add("top-of-day")
                 }
@@ -255,7 +255,7 @@ export function writeTimetableGrid(timetableData) {
     for (let event of timetableData) {
         // Find the row where the events day starts
         let row = findStartRowForDay(event.weekday, rowCounts);
-        const [ dayStartRow, dayEndRow ] = findStartEndDayRowForRow(row, rowCounts);
+        const [dayStartRow, dayEndRow] = findStartEndDayRowForRow(row, rowCounts);
 
         let startCol = calculateTimeGridDistance(minStartTime, event.startTime.split(":").map(Number));
         let endCol = calculateTimeGridDistance(minStartTime, event.endTime.split(":").map(Number));
@@ -275,10 +275,18 @@ export function writeTimetableGrid(timetableData) {
         }
 
         // Insert event into DOM
-        const eventElement = document.createElement("div");
-        eventElement.innerText = `${event.title}\n${event.lecturer} in ${event.room}`;
+        /** @type {HTMLTemplateElement} */
+        const template = document.getElementById("event-template")
+        const eventElement = template.content.cloneNode(true).querySelector(".calendar-event")
+
+        eventElement.querySelector(".event-title").innerText = event.title
+        eventElement.querySelector(".event-type").innerText = event.type.map(t => t[0]).join(" ")
+        eventElement.querySelector(".event-detail").innerText = `${event.room}, ${event.parsedDate.info}, ${event.lecturer}`
+        if (event.group) {
+            eventElement.querySelector(".event-detail").innerText += ", Gr." + event.group;
+        }
         eventElement.eventData = event;
-        eventElement.classList.add("calendar-event")
+
         for (let type of event.type) {
             eventElement.classList.add("calendar-event-type-" + type.toLowerCase())
         }
@@ -301,7 +309,7 @@ export function writeTimetableGrid(timetableData) {
             for (let e of sameEvents) {
                 e.classList.add("hovered")
             }
-            
+
         })
         eventElement.addEventListener("mouseleave", (event) => {
             const allEvents = Array.from(document.querySelectorAll(".calendar-event.hovered"));

@@ -18,13 +18,13 @@ export function waitForPickedClasses(timetableData) {
         const eventsByRelated = Object.groupBy(events, e => e.cleanTitle)
         const sortedRelatedEvents = Object.entries(eventsByRelated).sort(([a], [b]) => a.localeCompare(b))
         for (const [cleanTitle, events] of sortedRelatedEvents) {
-        
+
             let relatedElement = document.createElement("tri-state-item");
             relatedElement.setAttribute("label", cleanTitle);
 
             for (const event of events) {
                 let eventElement = document.createElement("tri-state-item");
-                eventElement.setAttribute("label", `${event.title} (${event.lecturer}, ${event.weekday} ${event.startTime})`); ;
+                eventElement.setAttribute("label", `${event.title} (${event.lecturer}, ${event.weekday} ${event.startTime})`);
                 eventElement.eventId = event.dataHash;
                 relatedElement.appendChild(eventElement);
             }
