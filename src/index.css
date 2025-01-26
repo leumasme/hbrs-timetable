@@ -115,6 +115,10 @@ body {
             rgba(var(--event-color), 0.55) 40px
         )
     }
+    &.hovered {
+        outline: 2px dashed black;
+        z-index: 20;
+    }
 }
 
 .empty-space {

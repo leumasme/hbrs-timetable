@@ -273,6 +273,7 @@ export function writeTimetableGrid(timetableData) {
         // Insert event into DOM
         const eventElement = document.createElement("div");
         eventElement.innerText = event.title;
+        eventElement.eventData = event;
         eventElement.classList.add("calendar-event")
         for (let type of event.type) {
             eventElement.classList.add("calendar-event-type-" + type.toLowerCase())
@@ -289,6 +290,23 @@ export function writeTimetableGrid(timetableData) {
         // eventElement.style.backgroundColor = "#" + intToRGB(hashCode(event.cleanTitle + "aaa")) + "77"
         const [r, g, b] = intToRGBParts(hashCode(event.cleanTitle + "aaa"))
         eventElement.style.setProperty("--event-color", `${r}, ${g}, ${b}`)
+
+        // Hovering over one event should highlight all events which belong to the same course
+        eventElement.addEventListener("mouseenter", (event) => {
+            const allEvents = Array.from(document.querySelectorAll(".calendar-event"));
+            // document.querySelectorAll(".calendar-event").forEach(e => e.classList.remove("hovered"))
+            const sameEvents = allEvents.filter(e => e.eventData.cleanTitle == eventElement.eventData.cleanTitle);
+            for (let e of sameEvents) {
+                e.classList.add("hovered")
+            }
+            
+        })
+        eventElement.addEventListener("mouseleave", (event) => {
+            const allEvents = Array.from(document.querySelectorAll(".calendar-event.hovered"));
+            for (let e of allEvents) {
+                e.classList.remove("hovered")
+            }
+        })
 
         putGridElement(grid, row + 2, startCol + 2, endCol - startCol, 1, eventElement)
     }
