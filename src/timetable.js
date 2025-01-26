@@ -248,6 +248,10 @@ export function writeTimetableGrid(timetableData) {
     // 2d array of grid cells occupancy. First rows, then columns
     let gridMap = new Array(totalRows).fill(0).map(() => new Array(timeColumns.length).fill(false));
 
+    let baseEvents = Array.from(new Set(timetableData.map(e => e.cleanTitle)))
+    let hueDistance = 360 / baseEvents.length;
+    let eventHue = new Map(baseEvents.map((e, i) => [e, i * hueDistance]))
+
     for (let event of timetableData) {
         // Find the row where the events day starts
         let row = findStartRowForDay(event.weekday, rowCounts);
@@ -286,10 +290,8 @@ export function writeTimetableGrid(timetableData) {
             eventElement.classList.add("bottom-of-day")
         }
 
-        // TODO: Pick better colors for events, so they aren't too similar. Maybe use HSV?
-        // eventElement.style.backgroundColor = "#" + intToRGB(hashCode(event.cleanTitle + "aaa")) + "77"
-        const [r, g, b] = intToRGBParts(hashCode(event.cleanTitle + "aaa"))
-        eventElement.style.setProperty("--event-color", `${r}, ${g}, ${b}`)
+        const hue = eventHue.get(event.cleanTitle)
+        eventElement.style.setProperty("--event-color", `60% 0.15 ${hue}`)
 
         // Hovering over one event should highlight all events which belong to the same course
         eventElement.addEventListener("mouseenter", (event) => {
@@ -338,27 +340,4 @@ function findStartEndDayRowForRow(row, rowCounts) {
         day++;
     }
     return [dayStartRow, dayEndRow];
-}
-
-function hashCode(str) { // java String#hashCode
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return hash;
-}
-
-function intToRGB(i) {
-    let c = (i & 0x00FFFFFF)
-        .toString(16)
-        .toUpperCase();
-
-    return "00000".substring(0, 6 - c.length) + c;
-}
-
-function intToRGBParts(i) {
-    let r = (i & 0xFF0000) >> 16;
-    let g = (i & 0x00FF00) >> 8;
-    let b = i & 0x0000FF;
-    return [r, g, b];
 }

@@ -100,24 +100,24 @@ body {
     text-wrap-mode: nowrap;
     text-overflow: ellipsis;
 
-    background: rgba(var(--event-color), 0.5);
+    background: oklch(var(--event-color) / 0.5);
 
     &.calendar-event-type-übung:not(.calendar-event-type-vorlesung) {
         background: repeating-linear-gradient(
             45deg,
-            rgba(var(--event-color), 0.5),
-            rgba(var(--event-color), 0.5) 10px,
-            rgba(var(--event-color), 0.4) 10px,
-            rgba(var(--event-color), 0.4) 20px
+            oklch(var(--event-color) / 0.5),
+            oklch(var(--event-color) / 0.5) 10px,
+            oklch(var(--event-color) / 0.4) 10px,
+            oklch(var(--event-color) / 0.4) 20px
         )
     }
     &.calendar-event-type-seminar, &.calendar-event-type-praktikum {
         background: repeating-linear-gradient(
             -45deg,
-            rgba(var(--event-color), 0.45),
-            rgba(var(--event-color), 0.45) 20px,
-            rgba(var(--event-color), 0.55) 20px,
-            rgba(var(--event-color), 0.55) 40px
+            oklch(var(--event-color) / 0.45),
+            oklch(var(--event-color) / 0.45) 20px,
+            oklch(var(--event-color) / 0.55) 20px,
+            oklch(var(--event-color) / 0.55) 40px
         )
     }
     &.hovered {
