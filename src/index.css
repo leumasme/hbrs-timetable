@@ -97,6 +97,9 @@ body {
     /* Position in front of empty-space */
     z-index: 5;
 
+    text-wrap-mode: nowrap;
+    text-overflow: ellipsis;
+
     background: rgba(var(--event-color), 0.5);
 
     &.calendar-event-type-übung:not(.calendar-event-type-vorlesung) {

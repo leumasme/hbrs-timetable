@@ -272,7 +272,7 @@ export function writeTimetableGrid(timetableData) {
 
         // Insert event into DOM
         const eventElement = document.createElement("div");
-        eventElement.innerText = event.title;
+        eventElement.innerText = `${event.title}\n${event.lecturer} in ${event.room}`;
         eventElement.eventData = event;
         eventElement.classList.add("calendar-event")
         for (let type of event.type) {
