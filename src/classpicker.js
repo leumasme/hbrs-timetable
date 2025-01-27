@@ -74,7 +74,7 @@ function loadPreviouslySelectedEvents() {
     }
 }
 
-function saveSelectedEvents(pickedEvents) {
+export function saveSelectedEvents(pickedEvents) {
     const hashes = pickedEvents.map(e => e.dataHash).join(",");
     localStorage.setItem("selectedEvents", hashes);
     console.log("Saved", pickedEvents.length, "selected events:", hashes)

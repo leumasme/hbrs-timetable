@@ -1,5 +1,7 @@
 /** @typedef {"Mo" | "Di" | "Mi" | "Do" | "Fr" | "Sa" | "So"} Weekday */
 
+import { saveSelectedEvents } from "./classpicker.js";
+
 /** @typedef {{
   cleanTitle: string,
   date: string,
@@ -255,17 +257,15 @@ export function writeTimetableGrid(timetableData) {
     // 2d array of grid cells occupancy. First rows, then columns
     let gridMap = new Array(totalRows).fill(0).map(() => new Array(timeColumns.length).fill(false));
 
-    let baseEvents = Array.from(new Set(timetableData.map(e => e.cleanTitle)))
-    let hueDistance = 360 / baseEvents.length;
-    let eventHue = new Map(baseEvents.map((e, i) => [e, i * hueDistance]))
+    const eventHues = assignEventHues(timetableData);
 
-    for (let event of timetableData) {
+    for (let timetableEvent of timetableData) {
         // Find the row where the events day starts
-        let row = findStartRowForDay(event.weekday, rowCounts);
+        let row = findStartRowForDay(timetableEvent.weekday, rowCounts);
         const [dayStartRow, dayEndRow] = findStartEndDayRowForRow(row, rowCounts);
 
-        let startCol = calculateTimeGridDistance(minStartTime, event.startTime.split(":").map(Number));
-        let endCol = calculateTimeGridDistance(minStartTime, event.endTime.split(":").map(Number));
+        let startCol = calculateTimeGridDistance(minStartTime, timetableEvent.startTime.split(":").map(Number));
+        let endCol = calculateTimeGridDistance(minStartTime, timetableEvent.endTime.split(":").map(Number));
 
         // Skip rows until we find a free one
         do {
@@ -284,17 +284,18 @@ export function writeTimetableGrid(timetableData) {
         // Insert event into DOM
         /** @type {HTMLTemplateElement} */
         const template = document.getElementById("event-template")
+        /** @type {HTMLDivElement} */
         const eventElement = template.content.cloneNode(true).querySelector(".calendar-event")
 
-        eventElement.querySelector(".event-title").innerText = event.title
-        eventElement.querySelector(".event-type").innerText = event.type.map(t => t[0]).join(" ")
-        eventElement.querySelector(".event-detail").innerText = `${event.room}, ${event.parsedDate.info}, ${event.lecturer}`
-        if (event.group) {
-            eventElement.querySelector(".event-detail").innerText += ", Gr." + event.group;
+        eventElement.querySelector(".event-title").innerText = timetableEvent.title
+        eventElement.querySelector(".event-type").innerText = timetableEvent.type.map(t => t[0]).join(" ")
+        eventElement.querySelector(".event-detail").innerText = `${timetableEvent.room}, ${timetableEvent.parsedDate.info}, ${timetableEvent.lecturer}`
+        if (timetableEvent.group) {
+            eventElement.querySelector(".event-detail").innerText += ", Gr." + timetableEvent.group;
         }
-        eventElement.eventData = event;
+        eventElement.eventData = timetableEvent;
 
-        for (let type of event.type) {
+        for (let type of timetableEvent.type) {
             eventElement.classList.add("calendar-event-type-" + type.toLowerCase())
         }
 
@@ -305,7 +306,7 @@ export function writeTimetableGrid(timetableData) {
             eventElement.classList.add("bottom-of-day")
         }
 
-        const hue = eventHue.get(event.cleanTitle)
+        const hue = eventHues.get(timetableEvent.cleanTitle)
         eventElement.style.setProperty("--event-color", `60% 0.15 ${hue}`)
 
         // Hovering over one event should highlight all events which belong to the same course
@@ -324,11 +325,37 @@ export function writeTimetableGrid(timetableData) {
                 e.classList.remove("hovered")
             }
         })
+        // Middle Mouse Click - auxclick doesn't work for some reason
+        eventElement.addEventListener("mousedown", (clickEvent) => {
+            console.log(clickEvent)
+            if (clickEvent.button != 1) return;
+            clickEvent.preventDefault();
+            onMiddleClick(timetableData, timetableEvent)
+        }, { capture: true })
 
         putGridElement(grid, row + 2, startCol + 2, endCol - startCol, 1, eventElement)
     }
 
     fillEmptySpaces(grid, gridMap, rowCounts)
+}
+
+// Cache the event hues so that colors don't change when events are deleted
+let savedEventHues = null;
+function assignEventHues(timetableData) {
+    if (savedEventHues) return savedEventHues;
+    let baseEvents = Array.from(new Set(timetableData.map(e => e.cleanTitle)))
+    let hueDistance = 360 / baseEvents.length;
+    let eventHues = new Map(baseEvents.map((e, i) => [e, i * hueDistance]))
+    savedEventHues = eventHues;
+    return eventHues;
+}
+
+function onMiddleClick(timetableData, clickedTimetableEvent) {
+    const newTimetableData = timetableData.filter(e => e.dataHash != clickedTimetableEvent.dataHash);
+    saveSelectedEvents(newTimetableData);
+    // Clear calendar table
+    document.getElementById("calendar-table").innerHTML = "";
+    writeTimetableGrid(newTimetableData);
 }
 
 /* Given a weekday and the row counts for each day, find the row where the day starts */
