@@ -44,6 +44,13 @@ export async function getTimetableData() {
     // Wait for all hashes to be calculated, may run in parallel
     await Promise.all(promises);
 
+    for (let event of events) {
+        // HACK: fix some broken data parsing
+        // "Digital-Start-ups (Sem. Unterricht)" gets parsed as types:
+        // ['Seminar', 'e', 'm', '.', ' ', 'U', 'n', 't', 'e', 'r', 'r', 'i', 'c', 'h', 't']
+        event.type = event.type.filter(t => t.length > 1).map(t => t.replaceAll(/ +/g, ""));
+    }
+
     return events;
 }
 
