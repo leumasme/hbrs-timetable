@@ -47,7 +47,7 @@ input[type="checkbox"] {
     background: none;
     border: none;
     cursor: pointer;
-    color: #666666;
+    color: white;
     width: 16px;
     aspect-ratio: 1/1;
 }
@@ -71,8 +71,10 @@ input[type="checkbox"] {
 label {
     user-select: none;
     display: contents;
+    /* Allow splitting up words into multiple lines, so very long course names dont break the layout */
+    word-wrap: break-word;
 }
 
 * {
-    transition: all 0.3s;
+    transition: all 0.3s, color 0.2s;
 }
