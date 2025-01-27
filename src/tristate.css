@@ -19,12 +19,12 @@
     overflow: hidden;
 
     interpolate-size: allow-keywords;
-    
+
     max-height: 0px;
     visibility: hidden;
-    
+
     transition: visibility 200ms, max-height 200ms, margin-top 200ms;
-    
+
     &.expanded {
         max-height: fit-content;
         visibility: visible;

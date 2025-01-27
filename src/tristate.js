@@ -22,7 +22,7 @@ class TriStateItem extends HTMLElement {
         toggleBtn.onclick = () => this.toggleChildren();
         item.appendChild(toggleBtn);
         this._toggleBtn = toggleBtn;
-        
+
         // The actual checkbox
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
@@ -80,11 +80,13 @@ class TriStateItem extends HTMLElement {
         this._checkbox.indeterminate = value;
     }
 
+    /** Toggle whether the children list is expanded or not */
     toggleChildren() {
-        const isExpanded = this._childrenContainer.classList.toggle("expanded");
+        this._childrenContainer.classList.toggle("expanded");
         // TODO: Maybe use SVG/Icon instead of a character?
     }
 
+    /** Update Parents and Children based on this elements own checked state */
     handleCheckboxClick() {
         const isChecked = this.checked;
 
@@ -101,12 +103,12 @@ class TriStateItem extends HTMLElement {
     }
 
     /**
-     * Calculate and updates this element's checkbox state based on its children's states.
+     * Calculate and update own element's checkbox state based on its children's states.
      * Called by children when their state changes.
      */
     refreshState() {
         const children = Array.from(this.children).filter(el => el instanceof TriStateItem);
-        
+
         const checkedCount = children.filter(child => child.checked).length;
         const indeterminateCount = children.filter(child => child.indeterminate).length;
         const totalCount = children.length;

@@ -31,6 +31,7 @@ body {
     --label-text: black;
 }
 
+/* -- General utility classes -- */
 .center-contents-vertical, .center-contents-horizontal, .center-contents {
     display: flex;
     flex-direction: column;
@@ -49,16 +50,18 @@ body {
     text-align: center;
 }
 
+.hidden {
+    display: none;
+}
+
+/* -- -- */
+
 #errortext {
     color: salmon;
 }
 
 .spinner {
     width: 4em;
-}
-
-.hidden {
-    display: none;
 }
 
 #timetable {
@@ -83,10 +86,10 @@ body {
     margin-bottom: 20px;
 
     gap: calc(1px / var(--device-pixel-ratio));
-}
 
-#calendar-table>div {
-    overflow: hidden;
+    &>div {
+        overflow: hidden;
+    }
 }
 
 .day-label, .time-label {

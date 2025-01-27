@@ -24,6 +24,8 @@ import { saveSelectedEvents } from "./classpicker.js";
   dataHash: string,
 }} CalendarEvent */
 
+/** @typedef {[hour: number, minute: number]} Time */
+
 /** @returns {Promise<Array<CalendarEvent>>} */
 export async function getTimetableData() {
     let events = await fetch("https://eva2.olotl.net/").then(r => r.json());
@@ -57,9 +59,9 @@ export async function getTimetableData() {
 }
 
 /** 
- * @param {Array<number>} time
- * @param {Array<number>} start
- * @param {Array<number>} end
+ * @param {Time} time
+ * @param {Time} start
+ * @param {Time} end
  * @returns {boolean}
  */
 function isTimeWithin(time, start, end) {
@@ -95,6 +97,8 @@ export function calculateMaxDayOverlap(events, weekday) {
 }
 
 /**
+ * Calculate how many rows each day needs to have based on
+ * the maximum amount of events occouring at the same time on each day.
  * @param {Array<CalendarEvent>} events
  * @returns {Record<Weekday, number>}
  */
@@ -109,7 +113,8 @@ export function calculateAllDayOverlaps(events) {
 
 /** 
  * @description Calculate the earliest start time and latest end time of the given events.
- * @param {Array<CalendarEvent>} events
+ * @param {CalendarEvent[]} events
+ * @returns {[start: Time, end: Time]}
  */
 export function calculateTimeBounds(events) {
     let startTimeH = Infinity;
@@ -132,7 +137,9 @@ export function calculateTimeBounds(events) {
     return [[startTimeH, startTimeMin], [endTimeH, endTimeMin]];
 }
 
+/** Generate strings for the time column labels */
 export function generateTimeColumnTexts(startTime, endTime) {
+    /** @type {string[]} */
     let timeColumns = [];
     let [currentHour, currentMinute] = startTime;
     while (isTimeAfter(endTime, [currentHour, currentMinute])) {
@@ -146,6 +153,7 @@ export function generateTimeColumnTexts(startTime, endTime) {
     return timeColumns;
 }
 
+/** Initialize the Grid with its size and time/day labels */
 function initializeGrid(grid, rowCounts, timeColumns) {
     // Insert day labels at the left side
     // Starts at 1, skip 1 for other header
@@ -175,12 +183,17 @@ function initializeGrid(grid, rowCounts, timeColumns) {
 
 }
 
+/** Insert element into the grid with specified position and size */
 function putGridElement(grid, row, col, width, height, element) {
     element.style.gridRow = `${row} / span ${height}`;
     element.style.gridColumn = `${col} / span ${width}`;
     grid.appendChild(element);
 }
 
+/**
+ * Fill any empty spaces of the grid with empty-space filler elements to allow
+ * for horizontal/vertical lines in the empty space
+ */
 function fillEmptySpaces(grid, gridMap, rowCounts) {
     for (let row = 0; row < gridMap.length; row++) {
         for (let col = 0; col < gridMap[row].length; col++) {
@@ -226,6 +239,7 @@ export function writeTimetableGrid(timetableData) {
     console.log("Time Columns", timeColumns)
     // ---
 
+    // Calculate how many rows each day needs to have
     const rowCounts = calculateAllDayOverlaps(timetableData);
 
     const totalRows = Object.values(rowCounts).reduce((a, b) => a + b, 0)
@@ -346,6 +360,7 @@ export function writeTimetableGrid(timetableData) {
 
 // Cache the event hues so that colors don't change when events are deleted
 let savedEventHues = null;
+/** Assign Hue values to each event so that the event colors are evenly distributed */
 function assignEventHues(timetableData) {
     if (savedEventHues) return savedEventHues;
     let baseEvents = Array.from(new Set(timetableData.map(e => e.cleanTitle)))
@@ -355,6 +370,7 @@ function assignEventHues(timetableData) {
     return eventHues;
 }
 
+/** Middle click handler to remove items from the timetable */
 function onMiddleClick(timetableData, clickedTimetableEvent) {
     const newTimetableData = timetableData.filter(e => e.dataHash != clickedTimetableEvent.dataHash);
     saveSelectedEvents(newTimetableData);
@@ -363,7 +379,7 @@ function onMiddleClick(timetableData, clickedTimetableEvent) {
     writeTimetableGrid(newTimetableData);
 }
 
-/* Given a weekday and the row counts for each day, find the row where the day starts */
+/** Given a weekday and the row counts for each day, find the row where the day starts */
 function findStartRowForDay(day, rowCounts) {
     let row = 0;
     for (let d of days) {
@@ -373,7 +389,7 @@ function findStartRowForDay(day, rowCounts) {
     return row;
 }
 
-/* Given a row and the row counts for each day, find the row where the day starts and ends */
+/** Given a row and the row counts for each day, find the row where the day starts and ends */
 function findStartEndDayRowForRow(row, rowCounts) {
     let dayStartRow = 0;
     let dayEndRow = 0;
