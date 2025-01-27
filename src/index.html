@@ -41,10 +41,10 @@
     <div id="classpicker" class="center-contents-horizontal hidden">
         <div class="wrapper">
             <h1>Kurse Auswählen</h1>
-            <!-- TODO: Add searchbar if there's enough time? -->
             <div id="classpicker-options">
 
             </div>
+
             <div class="classpicker-buttons">
                 <button id="classpicker-finish">Stundenplan Erzeugen!</button>
                 <button id="classpicker-clear">Auswahl Löschen</button>
@@ -53,6 +53,8 @@
     </div>
     <div id="timetable" class="center-contents hidden">
         <div id="calendar-table"></div>
+        <p class="phone-hint">Hinweis: Auf Mobilgeräten funktioniert die Ansicht
+            im Horizontalen Modus wahrscheinlich besser</p>
     </div>
 
     <!-- Event -->
@@ -64,7 +66,8 @@
         </div>
     </template>
     <div class="footer">
-        <span>Basierend auf den Daten von <a href="https://eva2.inf.h-brs.de/">eva2</a> via <a href="https://github.com/leumasme/timetable-scraper-api">timetable-scraper-api</a></span>
+        <span class="center-text">Basierend auf den Daten von <a href="https://eva2.inf.h-brs.de/">eva2</a> via <a
+                href="https://github.com/leumasme/timetable-scraper-api">timetable-scraper-api</a></span>
     </div>
 </body>
 

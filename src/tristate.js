@@ -82,8 +82,7 @@ class TriStateItem extends HTMLElement {
 
     toggleChildren() {
         const isExpanded = this._childrenContainer.classList.toggle("expanded");
-        // TODO: Rotate SVG icon
-        // this._toggleBtn.textContent = isExpanded ? "▼" : "▶";
+        // TODO: Maybe use SVG/Icon instead of a character?
     }
 
     handleCheckboxClick() {

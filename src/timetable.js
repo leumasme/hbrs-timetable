@@ -1,6 +1,6 @@
-/** @typedef {"Mo" | "Di" | "Mi" | "Do" | "Fr" | "Sa" | "So"} Weekday */
-
 import { saveSelectedEvents } from "./classpicker.js";
+
+/** @typedef {"Mo" | "Di" | "Mi" | "Do" | "Fr" | "Sa" | "So"} Weekday */
 
 /** @typedef {{
   cleanTitle: string,

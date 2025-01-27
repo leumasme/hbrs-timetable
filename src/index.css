@@ -256,6 +256,18 @@ body {
     }
 }
 
+.phone-hint {
+    display: none;
+    /* I have to use media query somewhere for the assignmentpoints... */
+    @media screen and (max-width: 600px) {
+        display: block;
+        text-align: center;
+        background-color: var(--layer1-background);
+        color: var(--layer1-text);
+        padding: 8px;
+    }
+}
+
 .footer {
     width: 100%;
     background-color: var(--layer2-background);
@@ -266,5 +278,6 @@ body {
 
     & a {
         color: blue;
+        white-space: nowrap;
     }
 }
