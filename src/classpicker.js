@@ -35,6 +35,14 @@ export function waitForPickedClasses(timetableData) {
 
     loadPreviouslySelectedEvents();
 
+    document.getElementById("classpicker-clear").addEventListener("click", () => {
+        for (const triStateCheckbox of classpicker.querySelectorAll("tri-state-item")) {
+            if (!triStateCheckbox.checked) continue;
+            triStateCheckbox.checked = false;
+            triStateCheckbox.handleCheckboxClick();
+        }
+    })
+
     const finishbutton = document.getElementById("classpicker-finish");
     return new Promise((resolve, reject) => {
         finishbutton.addEventListener("click", () => {
