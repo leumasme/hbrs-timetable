@@ -209,6 +209,11 @@ const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
  * @param {Array<CalendarEvent>} timetableData
  */
 export function writeTimetableGrid(timetableData) {
+    if (timetableData.length == 0) {
+        document.getElementById("timetable").classList.add("hidden")
+        document.getElementById("no-classes-selected").classList.remove("hidden")
+    }
+
     // --- calculate column count / start+end time
     let [minStartTime, maxEndTime] = calculateTimeBounds(timetableData)
 

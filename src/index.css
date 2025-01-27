@@ -198,15 +198,18 @@ body {
     position: sticky;
     bottom: 0;
     background-color: var(--background);
+
     & button {
         font-size: large;
         margin: 5px;
     }
+
     & #classpicker-clear {
         background-color: pink;
         /* Changing the background color clears all other default button styling for some reason? */
         border: 1px solid black;
         border-radius: 2px;
+
         &:hover {
             background-color: lightcoral;
         }
@@ -256,8 +259,13 @@ body {
     }
 }
 
+#no-classes-selected button {
+    font-size: larger;
+}
+
 .phone-hint {
     display: none;
+
     /* I have to use media query somewhere for the assignmentpoints... */
     @media screen and (max-width: 600px) {
         display: block;
