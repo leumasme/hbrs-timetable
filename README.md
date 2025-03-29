@@ -8,7 +8,8 @@ Data is scraped via [leumasme/timetable-scraper-api](https://github.com/leumasme
 Created as an obligatory project for the Web Engineering course.  
 As part of this course, it had to be programmed in full Vanilla JS/HTML/CSS (I would have otherwise preferred Svelte+Typescript)
 
-
+| ![Event Picker](https://github.com/user-attachments/assets/92b17319-16bb-484b-a76e-0db8dd246a7c) | ![Timetable Display](https://github.com/user-attachments/assets/41bd4c2f-5a52-4bb4-bd4c-e183d78eb020) |
+| -- | -- |
 
 ## Features
 
